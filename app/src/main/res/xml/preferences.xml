@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:defaultValue="192.168.0.4"
+        android:key="hostname"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Hostname" />
+    <EditTextPreference
+        android:defaultValue="17055"
+        android:key="hostport"
+        android:title="Port" />
+</PreferenceScreen>

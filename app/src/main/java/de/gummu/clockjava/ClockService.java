@@ -56,7 +56,7 @@ public class ClockService extends JobService {
                     Log.w("TCP Exception", "Message: " + e.getMessage());
                     Log.d("TCP StackTrace" , Log.getStackTraceString(e));
                 };
-                jobFinished( params, true );
+                jobFinished( params, false );
             }
         }).start();
 

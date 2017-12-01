@@ -43,7 +43,7 @@ public class GumReceiver extends BroadcastReceiver {
         }
         if(periodic==null) {
             JobInfo.Builder builder = new JobInfo.Builder(1, serviceComponent);
-            builder.setPeriodic(60 * 60 * 1000);
+            builder.setPeriodic(3 * 60 * 60 * 1000);
             builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED); // require unmetered network
             //builder.setRequiresDeviceIdle(true); // device should be idle
             //builder.setRequiresCharging(false); // we don't care if the device is charging or no

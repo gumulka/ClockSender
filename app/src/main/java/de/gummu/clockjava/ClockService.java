@@ -32,6 +32,11 @@ public class ClockService extends JobService {
             public void run() {
                 AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
                 AlarmManager.AlarmClockInfo info = alarmMgr.getNextAlarmClock();
+                if(info==null) {
+                    Log.d("Thread", "No next alarm clock. Stoppting");
+                    jobFinished( params, false );
+                    return;
+                }
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(cs);
                 String hostname = sharedPref.getString(KEY_PREF_HOST_NAME, "\"192.168.0.4\"");
                 Log.d("Sender", "Host is " + hostname);
@@ -54,7 +59,6 @@ public class ClockService extends JobService {
                     Log.d("Thread", "Finished Sending");
                 } catch (IOException e) {
                     Log.w("TCP Exception", "Message: " + e.getMessage());
-                    Log.d("TCP StackTrace" , Log.getStackTraceString(e));
                 };
                 jobFinished( params, false );
             }

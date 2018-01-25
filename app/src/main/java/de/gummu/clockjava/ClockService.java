@@ -32,11 +32,6 @@ public class ClockService extends JobService {
             public void run() {
                 AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
                 AlarmManager.AlarmClockInfo info = alarmMgr.getNextAlarmClock();
-                if(info==null) {
-                    Log.d("Thread", "No next alarm clock. Stoppting");
-                    jobFinished( params, false );
-                    return;
-                }
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(cs);
                 String hostname = sharedPref.getString(KEY_PREF_HOST_NAME, "\"192.168.0.4\"");
                 Log.d("Sender", "Host is " + hostname);
@@ -49,11 +44,15 @@ public class ClockService extends JobService {
                     Socket socket = new Socket(hostname, hostport);
 //                    Socket socket = new Socket("130.75.16.136", hostport);
                     OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
-                    Date d = new Date(info.getTriggerTime());
-                    final DateFormat iso8601DateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
-                    iso8601DateFormatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
+                    if(info==null) {
+                        Date d = new Date(info.getTriggerTime());
+                        final DateFormat iso8601DateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
+                        iso8601DateFormatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
 
-                    osw.write(iso8601DateFormatter.format(d));
+                        osw.write(iso8601DateFormatter.format(d));
+                    } else {
+                        osw.write("UNDEFINED");
+                    }
                     osw.close();
                     socket.close();
                     Log.d("Thread", "Finished Sending");

@@ -1,5 +1,6 @@
 package de.gummu.clockjava;
 
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -59,9 +60,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Display the fragment as the main content.
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new SettingsFragment())
-                        .commit();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(android.R.id.content, new SettingsFragment());
+                transaction.addToBackStack("Blub");
+                transaction.commit();
             }
         });
     }

@@ -8,10 +8,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import org.eclipse.paho.android.service.MqttAndroidClient;
+
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,45 +19,42 @@ import java.util.TimeZone;
 
 public class ClockService extends JobService {
 
-    public static final String KEY_PREF_HOST_NAME = "hostname";
-    public static final String KEY_PREF_HOST_PORT = "hostport";
+    public static final String MQTT_BROKER_URL = "mqttbroker";
+    public static final String MQTT_CLIENT_ID = "mqttclient";
+    public static final String MQTT_TOPIC = "mqtttopic";
+
+
+    private MqttAndroidClient client;
+
 
     @Override
     public boolean onStartJob(final JobParameters params) {
-
         final ClockService cs = this;
+        final MqqClient pahoMqttClient = new MqqClient();
 
         new Thread(new Runnable() {
             public void run() {
                 AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
                 AlarmManager.AlarmClockInfo info = alarmMgr.getNextAlarmClock();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(cs);
-                String hostname = sharedPref.getString(KEY_PREF_HOST_NAME, "\"192.168.0.4\"");
-                Log.d("Sender", "Host is " + hostname);
-                String port = sharedPref.getString(KEY_PREF_HOST_PORT, "17055");
-                int hostport = Integer.parseInt(port);
-                Log.d("Sender", "Port is " + port);
+                String broker   = sharedPref.getString(MQTT_BROKER_URL, "\"192.168.0.4\"");
+                Log.d("Sender", "Broker: " + broker);
+                String clientid = sharedPref.getString(MQTT_CLIENT_ID, "\"AndroidClock\"");
+                Log.d("Sender", "ClientID: " + clientid);
+                client = pahoMqttClient.getMqttClient(getApplicationContext(), broker, clientid);
+                String topic = sharedPref.getString(MQTT_TOPIC, "\"/openhab/phone/test\"");
+                Log.d("Sender", "Topic: " + topic);
 
-                try {
-                    Log.d("Thread", "Sending to socket");
-                    Socket socket = new Socket(hostname, hostport);
-//                    Socket socket = new Socket("130.75.16.136", hostport);
-                    OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
-                    if(info==null) {
+                    if(info!=null) {
                         Date d = new Date(info.getTriggerTime());
                         final DateFormat iso8601DateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
                         iso8601DateFormatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
-
-                        osw.write(iso8601DateFormatter.format(d));
+                        pahoMqttClient.publishMessage(client, iso8601DateFormatter.format(d), 1, topic);
                     } else {
-                        osw.write("UNDEFINED");
+                        pahoMqttClient.publishMessage(client, "UNDEFINED", 1, topic);
                     }
-                    osw.close();
-                    socket.close();
                     Log.d("Thread", "Finished Sending");
-                } catch (IOException e) {
-                    Log.w("TCP Exception", "Message: " + e.getMessage());
-                };
+
                 jobFinished( params, false );
             }
         }).start();

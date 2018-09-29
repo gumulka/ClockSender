@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView blub;
 
     private void showInfo(String info) {
-//        blub.setText(info);
         Toast.makeText( getApplicationContext(),
                 info, Toast.LENGTH_SHORT )
                 .show();

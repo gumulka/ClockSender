@@ -42,6 +42,7 @@ public class ClockService extends JobService {
         final ClockService context = this;
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String broker   = sharedPref.getString(MQTT_BROKER_URL, DEFAULT_BROKER);
+        //TODO Split this one into three settings. Protocol, Hostname and Port
         Log.d(TAG, "Broker: " + broker);
         String clientid = sharedPref.getString(MQTT_CLIENT_ID, DEFAULT_CLIENT_ID);
         Log.d(TAG, "ClientID: " + clientid);
@@ -74,7 +75,6 @@ public class ClockService extends JobService {
                     doSend(topic, "UNDEFINED");
                 }
                 Log.d(TAG, "Finished Sending");
-
 
                 jobFinished( params, false );
             }

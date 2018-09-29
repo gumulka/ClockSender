@@ -18,8 +18,6 @@ public class GumReceiver extends BroadcastReceiver {
     private static JobInfo periodic = null;
     private static ComponentName serviceComponent = null;
 
-    private void startStuff() {
-    }
 
     @Override
     public void onReceive(Context context, Intent intent) {

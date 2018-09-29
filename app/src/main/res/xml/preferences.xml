@@ -2,13 +2,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
-        android:defaultValue="192.168.0.4"
-        android:key="hostname"
+        android:defaultValue="tcp://192.168.0.2:1883"
+        android:key="mqttbroker"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="Hostname" />
+        android:title="Broker URL" />
     <EditTextPreference
-        android:defaultValue="17055"
-        android:key="hostport"
-        android:title="Port" />
+        android:defaultValue="/openhab/handy/test"
+        android:key="mqtttopic"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Topich" />
+    <EditTextPreference
+        android:defaultValue="AndroidClock"
+        android:key="mqttclient"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="ClientID" />
 </PreferenceScreen>

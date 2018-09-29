@@ -59,6 +59,7 @@ public class ClockService extends JobService {
                 Log.d(TAG, "Topic: " + topic);
                 if(! mqttClient.isConnected() ) {
                     try {
+                        //TODO This throws a leaked ServiceConnection Exception.
                         connect();
                     }catch (Exception e) {
                         Log.w(TAG, e);
@@ -106,7 +107,7 @@ public class ClockService extends JobService {
 
 
     private void doSend(String topic, String msg) {
-        Log.d(TAG, "Sending message " + msg + " to topic " + topic);
+        Log.i(TAG, "Sending message " + msg + " to topic " + topic);
         MqttMessage message = new MqttMessage(msg.getBytes());
         message.setQos( 1 );
         try {

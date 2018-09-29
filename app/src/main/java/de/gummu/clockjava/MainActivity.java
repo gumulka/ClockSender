@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(android.R.id.content, new SettingsFragment());
                 transaction.addToBackStack("Blub");
                 transaction.commit();
+                //TODO this is not nice. Do it better.
             }
         });
     }

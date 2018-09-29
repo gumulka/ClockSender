@@ -12,7 +12,7 @@
         android:key="mqtttopic"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="Topich" />
+        android:title="Topic" />
     <EditTextPreference
         android:defaultValue="AndroidClock"
         android:key="mqttclient"
